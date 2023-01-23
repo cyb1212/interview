@@ -1,4 +1,4 @@
-Assigmnent with robot simulor
+Assignment with robot simulor
 ==========================================================================
 
 # Description
