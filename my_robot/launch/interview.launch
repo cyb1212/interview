@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<launch>
+    <!-- We resume the logic in empty_world.launch, changing only the name of the world to be launched -->
+    <include file="$(find gazebo_ros)/launch/empty_world.launch">
+        <!-- Note: the world_name is with respect to GAZEBO_RESOURCE_PATH environmental variable -->
+        <arg name="paused" value="false"/>
+        <arg name="use_sim_time" value="true"/>
+        <arg name="gui" value="true"/>
+        <arg name="recording" value="false"/>
+        <arg name="debug" value="false"/>
+    </include>
+
+    <!-- overwriting these args (It is noted that Marcus write the world files as sdf)-->
+    <arg name="debug" default="false" />
+    <arg name="gui" default="true" />
+    <arg name="pause" default="false" />
+ 	<arg name="rgb_topic"   default="/camera/rgb/image_raw"/>
+  	<arg name="depth_topic" default="/camera/depth/image_raw"/>
+  	<arg name="camera_info_topic" default="/camera/rgb/camera_info"/>
+	<arg name="database_path"     default="/home/cyb/Picking_task/src/dataset/rtabmap.db"/>
+    <arg name="localization" default="false"/>
+
+
+
+    <!-- Launch other relevant files-->
+    <include file="$(find my_robot)/launch/robot_description.launch"/>
+
+    <!-- Find my robot Description-->
+    <param name="robot_description" command="$(find xacro)/xacro --inorder '$(find my_robot)/urdf/my_robot_high.xacro'"/>
+
+     <!-- Robot pose -->
+     <arg name="x" default="1"/>
+     <arg name="y" default="0"/>
+     <arg name="z" default="0"/>
+     <arg name="roll" default="0"/>
+     <arg name="pitch" default="0"/>
+     <arg name="yaw" default="0"/>
+
+     <!-- Spawn My Robot -->
+     <node name="urdf_spawner" pkg="gazebo_ros" type="spawn_model" respawn="false" output="screen"
+            args="-urdf -param robot_description -model my_robot
+                  -x $(arg x) -y $(arg y) -z $(arg z)
+                  -R $(arg roll) -P $(arg pitch) -Y $(arg yaw)"/>
+
+    <!--  Start a mux between application and teleop  -->
+    <node pkg="topic_tools" type="mux" name="cmd_vel_mux" respawn="true" args="base_controller/command /cmd_vel /teleop/cmd_vel">
+    <remap from="mux" to="cmd_vel_mux"/>
+    </node>
+
+
+</launch>
