@@ -32,7 +32,8 @@ rostopic echo /imu_data
 
 After the above steps, you should have following outputs:
 
-/home/cyb/Pictures/Screenshot from 2023-01-23 16-24-57.png
+![Screenshot from 2023-01-23 16-24-57](https://user-images.githubusercontent.com/32351126/213977661-84e07bed-222c-49c3-8033-968b8cde86e1.png)
+
 
 ## Contact
 For questions, bug reports or suggestions please contact
